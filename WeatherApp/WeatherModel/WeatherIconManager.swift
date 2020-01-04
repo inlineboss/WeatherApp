@@ -1,6 +1,6 @@
 import UIKit
 
-enum WeatherManager : String {
+enum WeatherIconManager : String {
     case NaN = "NaN"
     case clearDay = "clear-day"
     case clearNight = "clear-night"
@@ -50,7 +50,7 @@ enum WeatherManager : String {
     }
 }
 
-extension WeatherManager {
+extension WeatherIconManager {
     var image : UIImage? {
         return UIImage(named: self.rawValue)
     }
