@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CLLocationManagerDelegate {
 
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
@@ -21,19 +22,32 @@ class ViewController: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     var animIndicatorManager : AnimationIndicatorManager!
     
+    var locationManger = CLLocationManager()
+    
     lazy var weatherManager = APIWeatherManager(apiKey: "276d8ce1b5c2dd8da4de8959e810947d")
     
-    let coordinates = Coordinates(long:38.076752  , lat: 55.632095)
+    var coordinates = Coordinates(long:38.076752  , lat: 55.632095)
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        locationManger.delegate = self
+        locationManger.desiredAccuracy = kCLLocationAccuracyBest
+        locationManger.requestAlwaysAuthorization()
+        locationManger.startUpdatingLocation()
+        
         animIndicatorManager = AnimationIndicatorManager(activityIndicator)
         getCurrentWeather()
         
     }
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let userLocation = locations.last! as CLLocation
+        coordinates.long = userLocation.coordinate.longitude
+        coordinates.lat = userLocation.coordinate.latitude
+        updateUserInterface ()
+    }
     
     func getCurrentWeather() {
-        sleep(2)
         weatherManager.fetchCurrentWeatherWith(coordinates: coordinates) { (result) in
             switch result {
             case .Success(let currentWeather):
@@ -52,7 +66,7 @@ class ViewController: UIViewController {
         feelseLikeLabel.text = "Feels like: \(Int(5/9 * (currentWeather.apparentTemperature - 32)))˚C"
     }
 
-    @IBAction func refresh() {
+    func updateUserInterface () {
         animIndicatorManager.waiting(startBloack: {
             self.pressureLabel.isHidden = true
             self.humidityLabel.isHidden = true
@@ -62,7 +76,10 @@ class ViewController: UIViewController {
         }) {
             self.getCurrentWeather()
         }
-            
+    }
+    
+    @IBAction func refresh() {
+            updateUserInterface ()
     }
     
 }

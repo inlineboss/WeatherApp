@@ -1,8 +1,8 @@
 import Foundation
 
 struct Coordinates {
-    let long : Double
-    let lat : Double
+    var long : Double
+    var lat : Double
 }
 
 enum ForecastType : FinaleURLPoint {
