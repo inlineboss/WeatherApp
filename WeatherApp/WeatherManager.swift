@@ -17,7 +17,6 @@ enum WeatherManager : String {
     case tornado = "tornado"
     
     init(rawValue : String) {
-        
         switch rawValue {
         case "clear-day":
             self = .clearDay

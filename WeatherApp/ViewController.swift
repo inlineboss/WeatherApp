@@ -35,10 +35,6 @@ class ViewController: UIViewController {
         humidityLabel.text = "\(Int(currentWeather.humidity))%"
         temperatureLabel.text = "\(Int(currentWeather.temperature))˚C"
         feelseLikeLabel.text = "\(Int(currentWeather.appearentTemperature))˚C"
-        
-        
-        
-        
     }
 
     @IBAction func refresh() {
